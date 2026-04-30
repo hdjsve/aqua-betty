@@ -1,10 +1,24 @@
 using UnityEngine;
-using UnityEngine.UI; // 使用 UI 必須加這一行
+using UnityEngine.UI;
 
 public class GameHealth : MonoBehaviour
 {
+    [Header("生命值設定")]
     public int health = 3;
-    public Image[] hearts; // 用來放你畫面上的 3 顆愛心圖片
+    public Image[] hearts; // 在 Inspector 裡把 Heart_1, 2, 3 拖進去
+
+    private GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = Object.FindAnyObjectByType<GameManager>();
+
+        // 確保遊戲開始時，所有愛心都是顯示狀態
+        foreach (Image h in hearts)
+        {
+            if (h != null) h.enabled = true;
+        }
+    }
 
     public void LoseHealth()
     {
@@ -12,22 +26,19 @@ public class GameHealth : MonoBehaviour
 
         health--;
 
-        // 根據剩餘血量隱藏愛心
-        // 例如：剩 2 顆血，就隱藏 hearts[2]
+        // 隱藏對應索引的愛心圖片
         if (hearts != null && health < hearts.Length)
         {
             hearts[health].enabled = false;
         }
 
+        // 如果血量沒了，通知 GameManager 結束遊戲
         if (health <= 0)
         {
-            GameOver();
+            if (gameManager != null)
+            {
+                gameManager.GameOver(false); // false 代表失敗
+            }
         }
-    }
-
-    void GameOver()
-    {
-        Debug.Log("遊戲結束！小美人魚哭了...");
-        // 這裡之後可以寫：顯示遊戲結束面板
     }
 }

@@ -2,14 +2,21 @@ using UnityEngine;
 
 public class EffectManager : MonoBehaviour
 {
-    public GameObject brokenHeartUI; // 拖入畫面中間的破碎愛心物件
+    public GameObject brokenHeartUI; // 拖入畫面中間的 BrokenHeartFX 物件
+
+    void Start()
+    {
+        if (brokenHeartUI != null) brokenHeartUI.SetActive(false);
+    }
 
     public void ShowBrokenHeart()
     {
-        brokenHeartUI.SetActive(true);
-        // 如果你有寫 Animator，這裡會自動播放
-        // 1秒後自動隱藏
-        Invoke("HideBrokenHeart", 1f);
+        if (brokenHeartUI != null)
+        {
+            brokenHeartUI.SetActive(true);
+            // 1秒後自動隱藏
+            Invoke("HideBrokenHeart", 1.0f);
+        }
     }
 
     void HideBrokenHeart()
